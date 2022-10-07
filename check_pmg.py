@@ -40,7 +40,7 @@ class CheckPMG(object):
         """
         try:
             result = subprocess.run(command_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            if result.stderr:
+            if "200" not in result.stderr:
                 print(f"{result.stderr}\n")
         except FileNotFoundError as e:
             self.return_string += f"Error: Command {command_list} not found. Is it installed and are all paths correct?\n"
