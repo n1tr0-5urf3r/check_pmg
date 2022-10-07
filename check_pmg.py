@@ -2,6 +2,19 @@ import json
 import subprocess
 import argparse
 
+###########################################################################
+# Written by Fabian Ihle, fabi@ihlecloud.de                               #
+# Created: 07.10.2022                                                     #
+# github: https://github.com/n1tr0-5urf3r/check_pmg                       #
+#                                                                         #
+# Checks the mail, spam, and virus count for anomalies and validates      #
+# configured relay hosts of Proxmox Mail Gateway                          #
+#                                                                         #                          #
+# ----------------------------------------------------------------------- #
+# Changelog:                                                              #
+# 071022 Version 1.0 - Initial release                                    #
+###########################################################################
+
 class CheckPMG(object):
 
     def __init__(self, sender_limit, spam_limit, virus_limit, domains) -> None:
@@ -80,6 +93,8 @@ class CheckPMG(object):
         if diff: 
             self.exit_code = 2
             self.return_string += f"\nCritical: Domains {diff} not configured as relay hosts!\n"
+        else:
+            self.return_string += "All domains configured.\n"
         return
 
     def exit_with_result(self):
@@ -87,17 +102,17 @@ class CheckPMG(object):
         Exits the script with the previously defined exit code and ouputs the result string.
         """
         if self.exit_code == 0:
-            self.return_string = "All fine :)."
+            self.return_string = f"All fine :).\n{self.return_string}"
         print(self.return_string)
         exit(self.exit_code)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Check Proxmox status")
-    parser.add_argument('-c' , '--maxcount', default=1000, action='store', type=int, help="Threshold for max. mails sent in a day.")
-    parser.add_argument('-v' , '--viruscount', default=5, action='store', type=int, help="Threshold for max. spam mails sent in a day.")
-    parser.add_argument('-s' , '--spamcount', default=10, action='store', type=int, help="Threshold for max. virus mails sent in a day.")
-    parser.add_argument('-d' , '--domain', default=[], action='append', help="Specify a domain which will be validated as configured relay host.")
+    parser.add_argument('-c' , '--maxcount', default=1000, action='store', type=int, help="Threshold for max. mails sent in a day. Default: 1000")
+    parser.add_argument('-v' , '--viruscount', default=5, action='store', type=int, help="Threshold for max. spam mails sent in a day. Default: 5")
+    parser.add_argument('-s' , '--spamcount', default=10, action='store', type=int, help="Threshold for max. virus mails sent in a day. Default: 10")
+    parser.add_argument('-d' , '--domain', default=[], action='append', help="Specify a domain which will be validated as configured relay host. Default: None")
 
     args = parser.parse_args()
 
