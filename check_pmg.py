@@ -2,6 +2,7 @@ import json
 import subprocess
 import argparse
 from pathlib import Path
+import datetime
 
 ###########################################################################
 # Written by Fabian Ihle, fabi@ihlecloud.de                               #
@@ -15,6 +16,7 @@ from pathlib import Path
 # Changelog:                                                              #
 # 071022 Version 1.0 - Initial release                                    #
 # 021222 Version 1.1 - Include sent mails with multiple recipients, cache #
+# 091222 Version 1.2 - Fix day parameter                                  #
 ###########################################################################
 
 class CheckPMG(object):
@@ -57,7 +59,8 @@ class CheckPMG(object):
         """
         Retrieves sender statistics from the pmg API.
         """
-        result = self.run_shell_command([self.sudo_bin, self.pmg_bin, "get", "statistics/sender", "--day", "1"])
+        todays_day = datetime.datetime.now().day
+        result = self.run_shell_command([self.sudo_bin, self.pmg_bin, "get", "statistics/sender", "--day", f"{todays_day}"])
         sender_stats = json.loads(result.stdout)
 
         return sender_stats
@@ -68,7 +71,8 @@ class CheckPMG(object):
 
         :param address: email address of the sender to be queried
         """
-        result = self.run_shell_command([self.sudo_bin, self.pmg_bin, "get", "statistics/detail", "--address", address, "--type", "sender", "--day", "1"])
+        todays_day = datetime.datetime.now().day
+        result = self.run_shell_command([self.sudo_bin, self.pmg_bin, "get", "statistics/detail", "--address", address, "--type", "sender", "--day", f"{todays_day}"])
         sender_details = json.loads(result.stdout)
         return len(sender_details)
 
