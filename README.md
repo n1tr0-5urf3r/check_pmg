@@ -1,8 +1,5 @@
 <p align="center"><img alt="Ihlecloud" src="https://me.ihlecloud.de/img/logo.png" height="76"></p></img>
 <h1 align="center">Icinga2 Scripts</h1>
-<p align="center" style="margin-bottom: 0px !important;">
-  <img width="400" src="img/fail2ban_new.png" alt="Example" align="center">
-</p>
 <br>
 <h3 align="center">
     <a href="https://github.com/n1tr0-5urf3r/check_pmg/releases">Download Latest
